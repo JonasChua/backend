@@ -4,22 +4,20 @@
 	"name": "Python 3",
 	"dockerComposeFile": "compose.yaml",
     "service": "devcontainer",
-    "workspaceFolder": "/workspaces/personal",
-	// "containerEnv": {
-	// 	"GOOGLE_APPLICATION_CREDENTIALS": "/workspaces/v3backend/src/svc-medlyves-storage.json"
-	// },
+    "workspaceFolder": "/workspaces/backend",
+	// "containerEnv": {},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [8080],
-	
+
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": {
-		"install_python_packages": "pip3 install --user -r src/requirements.txt"
+		"set up python": "pip3 install --user -r src/requirements.txt && pre-commit install"
 	},
-	
+
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {

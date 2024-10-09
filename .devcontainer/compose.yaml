@@ -5,7 +5,7 @@ services:
   devcontainer:
     depends_on:
       - postgres
-    container_name: personal
+    container_name: backend
     image: mcr.microsoft.com/devcontainers/python:3.12-bullseye
     volumes:
       - ../..:/workspaces:cached
