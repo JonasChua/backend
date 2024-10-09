@@ -1,0 +1,13 @@
+include:
+  - ../compose.yaml
+
+services:
+  devcontainer:
+    depends_on:
+      - postgres
+    container_name: personal
+    image: mcr.microsoft.com/devcontainers/python:3.12-bullseye
+    volumes:
+      - ../..:/workspaces:cached
+    network_mode: service:postgres
+    command: sleep infinity
