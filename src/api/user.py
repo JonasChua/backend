@@ -13,7 +13,7 @@ router = APIRouter()
 
 @router.get("/{username}", response_model=UserResponse)
 def get_user(username: str, session: Session = Depends(get_session)):
-    return curd.get_user(session, username)
+    return curd.get_user(session, username=username)
 
 
 @router.post("", response_model=UserResponse)

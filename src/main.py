@@ -11,7 +11,7 @@ logger = getLogger()
 @asynccontextmanager
 async def lifespan(application: FastAPI):
     try:
-        logger.info("Initialising DB")
+        logger.info("Initialising Database")
         initialise_database()
     except Exception as e:
         logger.info(e)
@@ -26,4 +26,4 @@ def root():
     return {"Info": "Personal API"}
 
 
-app.include_router(user_router, prefix="/user", tags=["User"])
+app.include_router(user_router, prefix="/user", tags=["user"])
