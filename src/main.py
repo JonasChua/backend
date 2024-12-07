@@ -21,5 +21,5 @@ app = FastAPI(title="Personal API", lifespan=lifespan)
 
 
 @app.get("/")
-async def root():
+def root():
     return {"Info": "Personal API"}
