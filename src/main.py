@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from src.database import initialise_database
 from src.api.user import router as user_router
 
-logger = getLogger()
+logger = getLogger(__name__)
 
 
 @asynccontextmanager

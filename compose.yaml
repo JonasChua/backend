@@ -5,15 +5,13 @@ services:
     networks:
       - db
     volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - db:/var/lib/postgresql/data
-    env_file:
-      - .env
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
       timeout: 2s
       interval: 5s
       retries: 10
@@ -28,12 +26,19 @@ services:
     networks:
       - db
 
-  # test-server:
-  #   image: test-server:latest
-  #   profiles: ["test"]
-  #   networks:
-  #     - db
-  #   command: pytest
+  test-server:
+    image: test-server:latest
+    profiles: ["test"]
+    environment:
+      - ENVIRONEMNT
+      - DB_USERNAME
+      - DB_PASSWORD
+      - DB_NAME
+      - DB_HOST
+      - DB_PORT
+    networks:
+      - db
+    command: pytest
 
 networks:
   db:
