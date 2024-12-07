@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from logging import getLogger
 from fastapi import FastAPI
 
-from src.common.utils import init_db
+from src.database import initialise_database
 
 logger = getLogger()
 
@@ -11,7 +11,7 @@ logger = getLogger()
 async def lifespan(application: FastAPI):
     try:
         logger.info("Initialising DB")
-        init_db()
+        initialise_database()
     except Exception as e:
         logger.info(e)
     yield
