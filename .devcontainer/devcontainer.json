@@ -5,7 +5,10 @@
 	"dockerComposeFile": "compose.yaml",
     "service": "devcontainer",
     "workspaceFolder": "/workspaces/backend",
-	// "containerEnv": {},
+	"containerEnv": {
+		"PYTHONDONTWRITEBYTECODE": "1",
+		"PYTHONBUFFERED": "1"
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -15,7 +18,7 @@
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": {
-		"set up python": "pip3 install --user -r src/requirements.txt && pre-commit install"
+		"set up python": "pip3 install --user -r ./requirements-dev.txt && pre-commit install"
 	},
 
 	// Configure tool-specific properties.
