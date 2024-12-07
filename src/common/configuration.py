@@ -1,8 +1,9 @@
 import os
 from dotenv import load_dotenv
-from logging import INFO, basicConfig, getLogger
+from logging import getLogger
+from logging.config import fileConfig
 
-basicConfig(level=INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+fileConfig("./logging.conf", disable_existing_loggers=False)
 logger = getLogger(__name__)
 
 load_dotenv()
