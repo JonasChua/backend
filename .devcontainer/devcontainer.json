@@ -3,24 +3,20 @@
 {
 	"name": "Python 3",
 	"dockerComposeFile": "compose.yaml",
-    "service": "devcontainer",
-    "workspaceFolder": "/workspaces/backend",
+	"service": "devcontainer",
+	"workspaceFolder": "/workspaces/backend",
 	"containerEnv": {
 		"PYTHONDONTWRITEBYTECODE": "1",
 		"PYTHONBUFFERED": "1"
 	},
-
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [8080],
-
+	"forwardPorts": [
+		8080
+	],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": {
-		"set up python": "pip3 install --user -r ./requirements-dev.txt && pre-commit install"
-	},
-
+	"postCreateCommand": "./scripts/setup.sh",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
@@ -34,7 +30,7 @@
 				"python.defaultInterpreterPath": "/usr/local/bin/python",
 				"python.languageServer": "Default",
 				"python.analysis.autoFormatStrings": true,
-                "python.analysis.autoSearchPaths": false,
+				"python.analysis.autoSearchPaths": false,
 				"python.analysis.typeCheckingMode": "strict",
 				"python.testing.pytestEnabled": true,
 				"[python]": {
@@ -53,6 +49,5 @@
 			]
 		}
 	},
-
 	"remoteUser": "vscode"
 }
