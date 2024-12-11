@@ -1,11 +1,15 @@
 # src/service/user.py
 
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from typing import Optional
 
 from src.common.exception import Conflict, NotFound
+from src.common.password_hashing import hash_password
 from src.database.user import User
 from src.model.user import UserCreate
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def get_user(
@@ -32,7 +36,10 @@ def create_user(session: Session, user_model: UserCreate) -> User:
         if "User" not in e.message:
             raise e
 
-    user = User(**user_model.model_dump(exclude_unset=True))
+    user = User(
+        **user_model.model_dump(exclude={"password"}, exclude_unset=True),
+        password_hash=hash_password(user_model.password),
+    )
     session.add(user)
     session.commit()
     return user

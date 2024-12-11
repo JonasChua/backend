@@ -1,4 +1,6 @@
-import os
+# src/common/configuration.py
+
+from os import environ
 from dotenv import load_dotenv
 from logging import getLogger
 from logging.config import fileConfig
@@ -8,15 +10,18 @@ logger = getLogger(__name__)
 
 load_dotenv()
 
-ENVIRONMENT = os.getenv("ENVIRONMENT")
+ENVIRONMENT = environ["ENVIRONMENT"]
 logger.info(f"{ENVIRONMENT=}")
 
-DB_USERNAME = os.getenv("DB_USERNAME")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = os.getenv("DB_PORT")
-DB_NAME = os.getenv("DB_NAME")
+DB_USERNAME = environ["DB_USERNAME"]
+DB_PASSWORD = environ["DB_PASSWORD"]
+DB_HOST = environ["DB_HOST"]
+DB_PORT = environ["DB_PORT"]
+DB_NAME = environ["DB_NAME"]
 DATABASE_URL = (
     f"postgresql+psycopg://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 )
-logger.info(f"{DATABASE_URL=}")
+logger.info(f"{DB_NAME=}")
+
+JWT_SECRET_KEY = environ["JWT_SECRET_KEY"]
+JWT_ALGORITHM = "HS256"

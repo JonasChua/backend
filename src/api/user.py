@@ -1,3 +1,5 @@
+# src/api/user.py
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 # from typing import Optional
@@ -6,7 +8,6 @@ from src.database import get_session
 
 from src.model.user import UserCreate, UserResponse
 from src.service import user as curd
-
 
 router = APIRouter()
 
