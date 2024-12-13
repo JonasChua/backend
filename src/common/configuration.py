@@ -3,11 +3,8 @@
 from os import environ
 from dotenv import load_dotenv
 from logging import getLogger
-from logging.config import fileConfig
 
-fileConfig("./logging.conf", disable_existing_loggers=False)
 logger = getLogger(__name__)
-
 load_dotenv()
 
 ENVIRONMENT = environ["ENVIRONMENT"]

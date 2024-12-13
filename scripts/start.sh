@@ -1,2 +1,2 @@
 #!/bin/bash
-uvicorn --host 0.0.0.0 --port 8000 --reload --reload-exclude "./test/*.py" --reload-exclude "./test/**/*.py" --log-level info src.main:app
+uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir "./src" --reload-exclude "./tests/*.py" --reload-exclude "./tests/**/*.py" --log-config "./logging.conf" --log-level info 
