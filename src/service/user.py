@@ -7,7 +7,7 @@ from typing import Optional
 from src.common.exception import Conflict, NotFound, Unauthorized
 from src.common.password_hashing import hash_password, verify_password
 from src.database.user import User
-from src.model.user import UserCreate
+from src.model.user import UserCreate, UserUpdate
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -49,9 +49,50 @@ def create_user(session: Session, user_model: UserCreate) -> User:
     return user
 
 
-def authenticate_user(session: Session, username: str, password: str) -> User:
-    user = get_user(session, username=username)
-    if verify_password(password, user.password_hash) is True:
+def update_username(session: Session, user: User, new_username: str) -> User:
+    if user.username == new_username:
         return user
 
-    raise Unauthorized("Invalid username or password")
+    try:
+        get_user(session, username=new_username)
+        raise Conflict("Username has been taken")
+    except NotFound as e:
+        if "User" not in e.message:
+            raise e
+
+    user.username = new_username
+    session.commit()
+    return user
+
+
+def update_user(session: Session, username: str, user_model: UserUpdate) -> User:
+    user = get_user(session, username=username)
+    if user_model.username is not None:
+        update_username(session, user, user_model.username)
+
+    if user_model.password is not None:
+        user.password_hash = hash_password(user_model.password)
+
+    update_fields = user_model.model_dump(
+        exclude={"username", "password"}, exclude_unset=True
+    )
+    for key, value in update_fields:
+        setattr(user, key, value)
+
+    session.commit()
+    return user
+
+
+def authenticate_user(session: Session, username: str, password: str) -> User:
+    user = get_user(session, username=username)
+    valid_password, updated_password_hash = verify_password(
+        password, user.password_hash
+    )
+    if valid_password is False:
+        raise Unauthorized("Invalid username or password")
+
+    if updated_password_hash is not None:
+        user.password_hash = updated_password_hash
+        session.commit()
+
+    return user
