@@ -7,7 +7,7 @@ from src.common.configuration import DATABASE_URL
 from src.database.base import Base
 
 TEST_DATABASE_URL = f"{DATABASE_URL}_test"
-engine = create_engine(TEST_DATABASE_URL, echo=True)
+engine = create_engine(TEST_DATABASE_URL)
 Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

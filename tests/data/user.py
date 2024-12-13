@@ -1,11 +1,12 @@
 # tests/data/user.py
 
+from src.common.password_hashing import hash_password
 from src.database.user import User
 from tests.common.database import get_session
 
 
-test_user_a = {"username": "username_a", "name": "name_a"}
-test_user_b = {"username": "username_b", "name": "name_b"}
+test_user_a = {"username": "username_a", "password": "P@ssw0rd!", "name": "name_a"}
+test_user_b = {"username": "username_b", "password": "P@ssw0rd!", "name": "name_b"}
 
 
 def create_user(user_dict: dict[str, str]) -> User:
@@ -14,7 +15,9 @@ def create_user(user_dict: dict[str, str]) -> User:
     if db_user is not None:
         return db_user
 
-    db_user = User(**user_dict)
+    create_user_dict = user_dict.copy()
+    create_user_dict["password_hash"] = hash_password(create_user_dict.pop("password"))
+    db_user = User(**create_user_dict)
     session.add(db_user)
     session.commit()
     return db_user

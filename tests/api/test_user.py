@@ -11,7 +11,8 @@ def test_getUser_success(client: TestClient):
     response_data = response.json()
     assert response.status_code == 200, response_data
     for key, value in test_user_a.items():
-        assert response_data[key] == value
+        if key not in {"password"}:
+            assert response_data[key] == value
 
 
 def test_getUser_userNotFound(client: TestClient):
@@ -28,7 +29,8 @@ def test_createUser_success(client: TestClient):
     response_data = response.json()
     assert response.status_code == 200, response_data
     for key, value in test_user_b.items():
-        assert response_data[key] == value
+        if key not in {"password"}:
+            assert response_data[key] == value
 
 
 def test_createUser_userAlreadyExist(client: TestClient):
