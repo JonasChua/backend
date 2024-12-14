@@ -76,7 +76,8 @@ def update_user(session: Session, username: str, user_model: UserUpdate) -> User
     update_fields = user_model.model_dump(
         exclude={"username", "password"}, exclude_unset=True
     )
-    for key, value in update_fields:
+    print(update_fields)
+    for key, value in update_fields.items():
         setattr(user, key, value)
 
     session.commit()

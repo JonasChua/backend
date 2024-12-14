@@ -3,7 +3,7 @@
 from fastapi.testclient import TestClient
 
 from tests.common.utility import parse_error
-from tests.data.user import test_user_a, test_user_b
+from tests.data.user import create_user, test_user_a, test_user_b
 
 
 def test_getUser_success(client: TestClient):
@@ -91,3 +91,50 @@ def test_createUser_userAlreadyExist(client: TestClient):
     error_code, message = parse_error(response_data)
     assert error_code
     assert "User" in message and "already exists" in message
+
+
+def test_updateUser_noUpdate_success(
+    client: TestClient, token_headers: dict[str, dict[str, str]]
+):
+    response = client.patch(
+        "/user", headers=token_headers["test_user_a"], json=test_user_a
+    )
+    response_data = response.json()
+    assert response.status_code == 200, response_data
+    for key, value in test_user_a.items():
+        if key not in {"password"}:
+            assert response_data[key] == value
+
+
+def test_updateUser_updateAll_success(
+    client: TestClient, token_headers: dict[str, dict[str, str]]
+):
+    updated_test_user_a = {
+        "username": "new_username_a",
+        "password": "new_P@ssw0rd!",
+        "name": "new_name_a",
+    }
+    response = client.patch(
+        "/user", headers=token_headers["test_user_a"], json=updated_test_user_a
+    )
+    response_data = response.json()
+    assert response.status_code == 200, response_data
+    for key, value in updated_test_user_a.items():
+        if key not in {"password"}:
+            assert response_data[key] == value
+
+
+def test_updateUser_updateUsername_usernameTaken(
+    client: TestClient, token_headers: dict[str, dict[str, str]]
+):
+    create_user(test_user_b)
+    response = client.patch(
+        "/user",
+        headers=token_headers["test_user_a"],
+        json={"username": test_user_b["username"]},
+    )
+    response_data = response.json()
+    assert response.status_code == 409, response_data
+    error_code, message = parse_error(response_data)
+    assert error_code
+    assert "Username has been taken" in message
